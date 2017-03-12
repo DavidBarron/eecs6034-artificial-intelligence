@@ -1,1 +1,3 @@
-# eecs_artificial_intelligence
+# EECS 6.034 - Artificial Intelligence
+
+###MIT OpenCourseWare
