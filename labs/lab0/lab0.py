@@ -23,7 +23,7 @@
 #   3. Python v3.0
 # Fill in your answer in the next line of code ("1", "2", or "3"):
 
-ANSWER_1 = 'fill-me-in'
+ANSWER_1 = '2'
 
 
 # Section 2: Programming warmup _____________________________________________
@@ -31,13 +31,27 @@ ANSWER_1 = 'fill-me-in'
 # Problem 2.1: Warm-Up Stretch
 
 def cube(x):
-    raise NotImplementedError
+    return x*x*x
 
 def factorial(x):
-    raise NotImplementedError
+    if x == 0 or x == 1:
+        return 1
+    elif x > 1:
+        return x * factorial(x-1)
+    else:
+        raise Exception("cannot take factorial of negative integer.")
 
 def count_pattern(pattern, lst):
-    raise NotImplementedError
+    count = 0
+    index = 0
+
+    while len(pattern) + index <= len(lst):
+        if pattern == lst[index: index + len(pattern)]:
+            count += 1
+
+        index += 1
+
+    return count
 
 
 # Problem 2.2: Expression depth
