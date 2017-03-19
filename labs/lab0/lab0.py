@@ -33,6 +33,7 @@ ANSWER_1 = '2'
 def cube(x):
     return x*x*x
 
+
 def factorial(x):
     if x == 0 or x == 1:
         return 1
@@ -40,6 +41,7 @@ def factorial(x):
         return x * factorial(x-1)
     else:
         raise Exception("cannot take factorial of negative integer.")
+
 
 def count_pattern(pattern, lst):
     count = 0
@@ -53,11 +55,27 @@ def count_pattern(pattern, lst):
 
     return count
 
-
 # Problem 2.2: Expression depth
 
+OPERATORS = ['expt', '+', '-', '*', '/']
+
+def is_operator(op):
+    return isinstance(op, str) # Failed to check if op is in OPERATORS
+
+
 def depth(expr):
-    raise NotImplementedError
+    if isinstance(expr, (str, int)):
+        return 0
+    elif isinstance(expr, (list, tuple)) and is_operator(expr[0]):
+        depth_left = depth(expr[1])
+        depth_right = depth(expr[2])
+
+        if not depth_left and not depth_right:
+            return 1
+        else:
+            return 1 + max(depth_left, depth_right)
+    else:
+        raise Exception("Malformed expression parsed in depth method: " + str(expr))
 
 
 # Problem 2.3: Tree indexing
