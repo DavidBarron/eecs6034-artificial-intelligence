@@ -81,7 +81,12 @@ def depth(expr):
 # Problem 2.3: Tree indexing
 
 def tree_ref(tree, index):
-    raise NotImplementedError
+    branch_leaf = tree
+
+    for i in index:
+        branch_leaf = branch_leaf[i]
+
+    return branch_leaf
 
 
 # Section 3: Symbolic algebra
