@@ -69,6 +69,16 @@ class Sum(list, Expression):
     """
     def __repr__(self):
         return "Sum(%s)" % list.__repr__(self)
+
+    def flatten(self):
+        """Simplifies nested sums."""
+        terms = []
+        for term in self:
+            if isinstance(term, Sum):
+                terms += list(term)
+            else:
+                terms.append(term)
+        return Sum(terms)
     
     def simplify(self):
         """
@@ -81,16 +91,6 @@ class Sum(list, Expression):
         else:
             return Sum([simplify_if_possible(term) for term in terms]).flatten()
 
-    def flatten(self):
-        """Simplifies nested sums."""
-        terms = []
-        for term in self:
-            if isinstance(term, Sum):
-                terms += list(term)
-            else:
-                terms.append(term)
-        return Sum(terms)
-
 
 class Product(list, Expression):
     """
@@ -99,7 +99,17 @@ class Product(list, Expression):
     """
     def __repr__(self):
         return "Product(%s)" % list.__repr__(self)
-    
+
+    def flatten(self):
+        """Simplifies nested products."""
+        factors = []
+        for factor in self:
+            if isinstance(factor, Product):
+                factors += list(factor)
+            else:
+                factors.append(factor)
+        return Product(factors)
+
     def simplify(self):
         """
         To simplify a product, we need to multiply all its factors together
@@ -118,21 +128,12 @@ class Product(list, Expression):
             result = multiply(result, simplify_if_possible(factor))
         return result.flatten()
 
-    def flatten(self):
-        """Simplifies nested products."""
-        factors = []
-        for factor in self:
-            if isinstance(factor, Product):
-                factors += list(factor)
-            else:
-                factors.append(factor)
-        return Product(factors)
 
 def simplify_if_possible(expr):
     """
     A helper function that guards against trying to simplify a non-Expression.
     """
-    if isinstance(expr, Expression):
+    if isinstance(expr, (Sum, Product)):
         return expr.simplify()
     else:
         return expr
@@ -174,5 +175,40 @@ def do_multiply(expr1, expr2):
     '*' will not help you.
     """
     # Replace this with your solution.
-    raise NotImplementedError
 
+    if isinstance(expr1, Sum) and isinstance(expr2, Sum):
+        expr3 = Sum([])
+        for term1 in expr1:
+            for term2 in expr2:
+                expr3 += multiply(term1, term2)
+        return expr3
+    elif isinstance(expr1, Sum) and isinstance(expr2, Product):
+        expr3 = Sum([])
+        for term in expr1:
+            expr3 += multiply(term, expr2)
+        return expr3
+    elif isinstance(expr1, Product) and isinstance(expr2, Sum):
+        return do_multiply(expr2, expr1)
+    elif isinstance(expr1, Product) and isinstance(expr2, Product):
+        expr3 = Product([])
+        expr3 += expr1
+        expr3 += expr2
+        return Sum([expr3])
+    else:
+        raise Exception("do_multiply() only accepts args of type Expression")
+
+
+if __name__ == '__main__':
+    prod1 = Product(['x', 'y'])
+    prod2 = Product([2])
+
+    res = multiply(prod1, prod2)
+
+    print(res)
+
+    prod3 = Sum(['x', 'y'])
+    prod4 = Sum([2, 3])
+
+    res = multiply(prod3, prod4)
+
+    print(res)
