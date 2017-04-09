@@ -138,6 +138,7 @@ def simplify_if_possible(expr):
     else:
         return expr
 
+
 # You may find the following helper functions to be useful.
 # "multiply" is provided for you; but you will need to write "do_multiply"
 # if you would like to use it.
