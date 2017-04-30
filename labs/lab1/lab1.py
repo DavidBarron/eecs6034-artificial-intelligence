@@ -114,6 +114,40 @@ TEST_RESULTS_TRANS2 = forward_chain([transitive_rule],
 # able to refer to the rules by name and easily rearrange them if
 # you need to.
 
+identity_rule = IF( OR('male (?x)',
+                       'female (?x)'),
+                    THEN('same-identity (?x) (?x)'))
+
+sibling_rule = IF( AND('parent (?x) (?y)',
+                       'parent (?x) (?z)',
+                       NOT('same-identity (?y) (?z)')),
+                   THEN('sibling (?y) (?z)', 'sibling (?z) (?y)'))
+
+brother_rule = IF( AND('sibling (?x) (?y)',
+                       'male (?x)'),
+                   THEN('bother (?x) (?y)'))
+
+sister_rule = IF( AND('sibling (?x) (?y)',
+                       'female (?x)'),
+                   THEN('sister (?x) (?y)'))
+
+son_rule = IF( AND('male (?x)',
+                   'parent (?y) (?x)'),
+               THEN('son (?x) (?y)'))
+
+daughter_rule = IF( AND('female (?x)',
+                   'parent (?y) (?x)'),
+               THEN('daughter (?x) (?y)'))
+
+father_rule = IF( AND('male (?x)',
+                   'parent (?x) (?y)'),
+               THEN('father (?x) (?y)'))
+
+mother_rule = IF( AND('female (?x)',
+                   'parent (?x) (?y)'),
+               THEN('mother (?x) (?y)'))
+
+
 # Then, put them together into a list in order, and call it
 # family_rules.
 family_rules = [ ]                    # fill me in
