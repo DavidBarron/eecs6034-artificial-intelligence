@@ -125,7 +125,7 @@ sibling_rule = IF( AND('parent (?x) (?y)',
 
 brother_rule = IF( AND('sibling (?x) (?y)',
                        'male (?x)'),
-                   THEN('bother (?x) (?y)'))
+                   THEN('brother (?x) (?y)'))
 
 sister_rule = IF( AND('sibling (?x) (?y)',
                        'female (?x)'),
@@ -147,10 +147,17 @@ mother_rule = IF( AND('female (?x)',
                    'parent (?x) (?y)'),
                THEN('mother (?x) (?y)'))
 
+grand_rule = IF( AND('parent (?x) (?y)',
+                     'parent (?y) (?z)'),
+                 THEN('grandparent (?x) (?z)', 'grandchild (?z) (?x)'))
+
 
 # Then, put them together into a list in order, and call it
 # family_rules.
-family_rules = [ ]                    # fill me in
+
+# fill me in
+family_rules = [identity_rule, sibling_rule, brother_rule, sister_rule, son_rule, daughter_rule, father_rule,
+                mother_rule, grand_rule]
 
 # Some examples to try it on:
 # Note: These are used for testing, so DO NOT CHANGE
