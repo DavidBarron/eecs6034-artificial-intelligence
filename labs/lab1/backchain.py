@@ -15,7 +15,13 @@ from zookeeper import ZOOKEEPER_RULES
 
 
 def backchain_to_goal_tree(rules, hypothesis):
-    raise NotImplementedError
+    goal_tree = OR()
+    goal_tree.append(hypothesis)  # The hypothesis is the ultimate CSF
+
+    if not rules:
+        return list(goal_tree)  # Bad base test? Not sure why the need to cast back to list
+
+    return goal_tree
 
 # Here's an example of running the backward chainer - uncomment
 # it to see it work:
