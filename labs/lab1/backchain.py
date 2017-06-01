@@ -21,7 +21,29 @@ def backchain_to_goal_tree(rules, hypothesis):
     if not rules:
         return list(goal_tree)  # Bad base test? Not sure why the need to cast back to list
 
-    return goal_tree
+    for rule in rules:
+        consequent = rule.consequent()[0]  # should handle multiple?
+        bindings = match(consequent, hypothesis)
+
+        if bindings:
+            antecedent = rule.antecedent()
+            if isinstance(antecedent, AND):
+                branch = AND()
+                for condition in antecedent:
+                    cond = populate(condition, bindings)
+                    branch.append(backchain_to_goal_tree(rules, cond))
+                goal_tree.append(branch)
+            elif isinstance(antecedent, OR):
+                branch = OR()
+                for condition in antecedent:
+                    cond = populate(condition, bindings)
+                    branch.append(backchain_to_goal_tree(rules, cond))
+                goal_tree.append(branch)
+            else:  # leaf
+                leaf = populate(antecedent, bindings)
+                goal_tree.append(leaf)
+
+    return simplify(goal_tree)
 
 # Here's an example of running the backward chainer - uncomment
 # it to see it work:
