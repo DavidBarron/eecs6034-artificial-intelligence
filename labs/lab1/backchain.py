@@ -42,6 +42,7 @@ def backchain_to_goal_tree(rules, hypothesis):
             else:  # leaf
                 leaf = populate(antecedent, bindings)
                 goal_tree.append(leaf)
+                goal_tree.append(backchain_to_goal_tree(rules, leaf))  # new leaf may match older consequent, need to check again
 
     return simplify(goal_tree)
 
