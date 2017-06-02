@@ -25,7 +25,7 @@ def backchain_to_goal_tree(rules, hypothesis):
         consequent = rule.consequent()[0]  # should handle multiple?
         bindings = match(consequent, hypothesis)
 
-        if bindings:
+        if bindings or bindings == {}:
             antecedent = rule.antecedent()
             if isinstance(antecedent, AND):
                 branch = AND()
